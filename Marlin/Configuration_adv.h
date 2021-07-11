@@ -131,21 +131,10 @@
   #define REDUNDANT_BETA                   3950    // Beta value
 #endif
 
-/**
- * Configuration options for MAX Thermocouples (-2, -3, -5).
- *   FORCE_HW_SPI:   Ignore SCK/MOSI/MISO pins and just use the CS pin & default SPI bus.
- *   MAX31865_WIRES: Set the number of wires for the probe connected to a MAX31865 board, 2-4. Default: 2
- *   MAX31865_50HZ:  Enable 50Hz filter instead of the default 60Hz.
- */
-//#define TEMP_SENSOR_FORCE_HW_SPI
-//#define MAX31865_SENSOR_WIRES_0 2
-//#define MAX31865_SENSOR_WIRES_1 2
-//#define MAX31865_50HZ_FILTER
-
-/**
- * Hephestos 2 24V heated bed upgrade kit.
- * https://store.bq.com/en/heated-bed-kit-hephestos2
- */
+//
+// Hephestos 2 24V heated bed upgrade kit.
+// https://store.bq.com/en/heated-bed-kit-hephestos2
+//
 //#define HEPHESTOS2_HEATED_BED_KIT
 #if ENABLED(HEPHESTOS2_HEATED_BED_KIT)
   #undef TEMP_SENSOR_BED
@@ -1840,7 +1829,7 @@
   //#define BABYSTEP_ALWAYS_AVAILABLE       // Allow babystepping at all times (not just during movement).
   //#define BABYSTEP_XY                     // Also enable X/Y Babystepping. Not supported on DELTA!
   #define BABYSTEP_INVERT_Z false           // Change if Z babysteps should go the other way
-  //#define BABYSTEP_MILLIMETER_UNITS       // Specify BABYSTEP_MULTIPLICATOR_(XY|Z) in mm instead of micro-steps
+  #define BABYSTEP_MILLIMETER_UNITS       // Specify BABYSTEP_MULTIPLICATOR_(XY|Z) in mm instead of micro-steps
   #define BABYSTEP_MULTIPLICATOR_Z  1       // (steps or mm) Steps or millimeter distance for each Z babystep
   #define BABYSTEP_MULTIPLICATOR_XY 1       // (steps or mm) Steps or millimeter distance for each XY babystep
 
@@ -1999,9 +1988,9 @@
     // calibration.
     //#define BTC_PROBE_TEMP    30  // (°C)
 
-    // Height above Z=0.0f to raise the nozzle. Lowering this can help the probe to heat faster.
-    // Note: the Z=0.0f offset is determined by the probe offset which can be set using M851.
-    //#define PTC_PROBE_HEATING_OFFSET 0.5f
+    // Height above Z=0.0 to raise the nozzle. Lowering this can help the probe to heat faster.
+    // Note: the Z=0.0 offset is determined by the probe offset which can be set using M851.
+    //#define PTC_PROBE_HEATING_OFFSET 0.5
 
     // Height to raise the Z-probe between heating and taking the next measurement. Some probes
     // may fail to untrigger if they have been triggered for a long time, which can be solved by
@@ -2358,7 +2347,7 @@
  *
  * Enable PARK_HEAD_ON_PAUSE to add the G-code M125 Pause and Park.
  */
-//#define ADVANCED_PAUSE_FEATURE
+#define ADVANCED_PAUSE_FEATURE
 #if ENABLED(ADVANCED_PAUSE_FEATURE)
   #define PAUSE_PARK_RETRACT_FEEDRATE         60  // (mm/s) Initial retract feedrate.
   #define PAUSE_PARK_RETRACT_LENGTH            2  // (mm) Initial retract.
@@ -2396,7 +2385,7 @@
   #define FILAMENT_CHANGE_ALERT_BEEPS         10  // Number of alert beeps to play when a response is needed.
   #define PAUSE_PARK_NO_STEPPER_TIMEOUT           // Enable for XYZ steppers to stay powered on during filament change.
 
-  //#define PARK_HEAD_ON_PAUSE                    // Park the nozzle during pause and filament change.
+  #define PARK_HEAD_ON_PAUSE                    // Park the nozzle during pause and filament change.
   //#define HOME_BEFORE_FILAMENT_CHANGE           // If needed, home before parking for filament change
 
   //#define FILAMENT_LOAD_UNLOAD_GCODES           // Add M701/M702 Load/Unload G-codes, plus Load/Unload in the LCD Prepare menu.
@@ -2567,7 +2556,7 @@
   #endif
 
   #if AXIS_IS_TMC(X2)
-    #define X2_CURRENT      800
+    #define X2_CURRENT      550
     #define X2_CURRENT_HOME X2_CURRENT
     #define X2_MICROSTEPS    X_MICROSTEPS
     #define X2_RSENSE         0.11
@@ -2576,7 +2565,7 @@
   #endif
 
   #if AXIS_IS_TMC(Y)
-    #define Y_CURRENT       800
+    #define Y_CURRENT       550
     #define Y_CURRENT_HOME  Y_CURRENT
     #define Y_MICROSTEPS     16
     #define Y_RSENSE          0.11
@@ -2594,7 +2583,7 @@
   #endif
 
   #if AXIS_IS_TMC(Z)
-    #define Z_CURRENT       800
+    #define Z_CURRENT       550
     #define Z_CURRENT_HOME  Z_CURRENT
     #define Z_MICROSTEPS     16
     #define Z_RSENSE          0.11
@@ -2657,7 +2646,7 @@
   #endif
 
   #if AXIS_IS_TMC(E0)
-    #define E0_CURRENT      800
+    #define E0_CURRENT      650
     #define E0_MICROSTEPS    16
     #define E0_RSENSE         0.11
     #define E0_CHAIN_POS     -1
@@ -4119,49 +4108,48 @@
 #endif // HAS_PRUSA_MMU2
 
 /**
-/**
- * Marlin 3D Printer Firmware
- * Copyright (c) 2020 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
- *
- * Based on Sprinter and grbl.
- * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- *
+ * Advanced Print Counter settings
  */
-#pragma once
+#if ENABLED(PRINTCOUNTER)
+  #define SERVICE_WARNING_BUZZES  3
+  // Activate up to 3 service interval watchdogs
+  //#define SERVICE_NAME_1      "Service S"
+  //#define SERVICE_INTERVAL_1  100 // print hours
+  //#define SERVICE_NAME_2      "Service L"
+  //#define SERVICE_INTERVAL_2  200 // print hours
+  //#define SERVICE_NAME_3      "Service 3"
+  //#define SERVICE_INTERVAL_3    1 // print hours
+#endif
+
+// @section develop
+
+//
+// M100 Free Memory Watcher to debug memory usage
+//
+//#define M100_FREE_MEMORY_WATCHER
+
+//
+// M42 - Set pin states
+//
+//#define DIRECT_PIN_CONTROL
+
+//
+// M43 - display pin status, toggle pins, watch pins, watch endstops & toggle LED, test servo probe
+//
+//#define PINS_DEBUGGING
+
+// Enable Marlin dev mode which adds some special commands
+//#define MARLIN_DEV_MODE
 
 /**
- * Configuration_adv.h
- *
- * Advanced settings.
- * Only change these if you know exactly what you're doing.
- * Some of these settings can damage your printer if improperly set!
- *
- * Basic settings can be found in Configuration.h
+ * Postmortem Debugging captures misbehavior and outputs the CPU status and backtrace to serial.
+ * When running in the debugger it will break for debugging. This is useful to help understand
+ * a crash from a remote location. Requires ~400 bytes of SRAM and 5Kb of flash.
  */
-#define CONFIGURATION_ADV_H_VERSION 02000901
-
-//===========================================================================
-//============================= Thermal Settings ============================
-//===========================================================================
-// @section temperature
+//#define POSTMORTEM_DEBUGGING
 
 /**
- * Thermocouple sensors are quite sensitive to noise.  Any noise induced in
- * the sensor wires, such as by stepper motor wires run in parallel to them,
- * may result in the thermocouple sensor reporting spurious errors.  This
- * value is the number of errors which can occur in a row before the error
- * is reported.  This allows us to ignore intermittent error conditions while
- * still detecting an actual failure, which should result in a continuous
+ * Software Reset options
+ */
+//#define SOFT_RESET_VIA_SERIAL         // 'KILL' and '^X' commands will soft-reset the controller
+//#define SOFT_RESET_ON_KILL            // Use a digital button to soft-reset the controller after KILL
