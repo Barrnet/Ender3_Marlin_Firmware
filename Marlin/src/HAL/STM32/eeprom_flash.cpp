@@ -125,7 +125,7 @@ bool PersistentStore::access_start() {
         address += sizeof(uint32_t);
       }
       if (current_slot == -1) {
-        // We didn't find anything, so we'll just intialize to empty
+        // We didn't find anything, so we'll just initialize to empty
         for (int i = 0; i < MARLIN_EEPROM_SIZE; i++) ram_eeprom[i] = EMPTY_UINT8;
         current_slot = EEPROM_SLOTS;
       }
@@ -133,7 +133,7 @@ bool PersistentStore::access_start() {
         // load current settings
         uint8_t *eeprom_data = (uint8_t *)SLOT_ADDRESS(current_slot);
         for (int i = 0; i < MARLIN_EEPROM_SIZE; i++) ram_eeprom[i] = eeprom_data[i];
-        DEBUG_ECHOLNPAIR("EEPROM loaded from slot ", current_slot, ".");
+        DEBUG_ECHOLNPGM("EEPROM loaded from slot ", current_slot, ".");
       }
       eeprom_data_written = false;
     }
@@ -174,14 +174,14 @@ bool PersistentStore::access_finish() {
         UNLOCK_FLASH();
 
         TERN_(HAS_PAUSE_SERVO_OUTPUT, PAUSE_SERVO_OUTPUT());
-        DISABLE_ISRS();
+        hal.isr_off();
         status = HAL_FLASHEx_Erase(&EraseInitStruct, &SectorError);
-        ENABLE_ISRS();
+        hal.isr_on();
         TERN_(HAS_PAUSE_SERVO_OUTPUT, RESUME_SERVO_OUTPUT());
         if (status != HAL_OK) {
-          DEBUG_ECHOLNPAIR("HAL_FLASHEx_Erase=", status);
-          DEBUG_ECHOLNPAIR("GetError=", HAL_FLASH_GetError());
-          DEBUG_ECHOLNPAIR("SectorError=", SectorError);
+          DEBUG_ECHOLNPGM("HAL_FLASHEx_Erase=", status);
+          DEBUG_ECHOLNPGM("GetError=", HAL_FLASH_GetError());
+          DEBUG_ECHOLNPGM("SectorError=", SectorError);
           LOCK_FLASH();
           return false;
         }
@@ -204,9 +204,9 @@ bool PersistentStore::access_finish() {
           offset += sizeof(uint32_t);
         }
         else {
-          DEBUG_ECHOLNPAIR("HAL_FLASH_Program=", status);
-          DEBUG_ECHOLNPAIR("GetError=", HAL_FLASH_GetError());
-          DEBUG_ECHOLNPAIR("address=", address);
+          DEBUG_ECHOLNPGM("HAL_FLASH_Program=", status);
+          DEBUG_ECHOLNPGM("GetError=", HAL_FLASH_GetError());
+          DEBUG_ECHOLNPGM("address=", address);
           success = false;
           break;
         }
@@ -216,7 +216,7 @@ bool PersistentStore::access_finish() {
 
       if (success) {
         eeprom_data_written = false;
-        DEBUG_ECHOLNPAIR("EEPROM saved to slot ", current_slot, ".");
+        DEBUG_ECHOLNPGM("EEPROM saved to slot ", current_slot, ".");
       }
 
       return success;
@@ -229,9 +229,9 @@ bool PersistentStore::access_finish() {
       // output. Servo output still glitches with interrupts disabled, but recovers after the
       // erase.
       TERN_(HAS_PAUSE_SERVO_OUTPUT, PAUSE_SERVO_OUTPUT());
-      DISABLE_ISRS();
+      hal.isr_off();
       eeprom_buffer_flush();
-      ENABLE_ISRS();
+      hal.isr_on();
       TERN_(HAS_PAUSE_SERVO_OUTPUT, RESUME_SERVO_OUTPUT());
 
       eeprom_data_written = false;
