@@ -51,7 +51,7 @@ const uint16_t VPList_Main[] PROGMEM = {
   #if HAS_HOTEND
     VP_T_E0_Is, VP_T_E0_Set, VP_E0_STATUS,
   #endif
-  #if HOTENDS >= 2
+  #if HAS_MULTI_HOTEND
     VP_T_E1_Is, VP_T_E1_Set,
   #endif
   #if HAS_HEATED_BED
@@ -73,7 +73,7 @@ const uint16_t VPList_Temp[] PROGMEM = {
   #if HAS_HOTEND
     VP_T_E0_Is, VP_T_E0_Set,
   #endif
-  #if HOTENDS >= 2
+  #if HAS_MULTI_HOTEND
     VP_T_E1_Is, VP_T_E1_Set,
   #endif
   #if HAS_HEATED_BED
@@ -87,7 +87,7 @@ const uint16_t VPList_Status[] PROGMEM = {
   #if HAS_HOTEND
     VP_T_E0_Is, VP_T_E0_Set,
   #endif
-  #if HOTENDS >= 2
+  #if HAS_MULTI_HOTEND
     VP_T_E1_Is, VP_T_E1_Set,
   #endif
   #if HAS_HEATED_BED
@@ -120,7 +120,7 @@ const uint16_t VPList_Preheat[] PROGMEM = {
   #if HAS_HOTEND
     VP_T_E0_Is, VP_T_E0_Set,
   #endif
-  #if HOTENDS >= 2
+  #if HAS_MULTI_HOTEND
     VP_T_E1_Is, VP_T_E1_Set,
   #endif
   #if HAS_HEATED_BED
@@ -187,7 +187,7 @@ const uint16_t VPList_SD_PrintManipulation[] PROGMEM = {
   #if HAS_HOTEND
     VP_T_E0_Is, VP_T_E0_Set,
   #endif
-  #if HOTENDS >= 2
+  #if HAS_MULTI_HOTEND
     VP_T_E1_Is, VP_T_E1_Set,
   #endif
   #if HAS_HEATED_BED
@@ -379,7 +379,7 @@ const struct DGUS_VP_Variable ListOfVP[] PROGMEM = {
       VPHELPER(VP_E0_FILAMENT_LOAD_UNLOAD, nullptr, ScreenHandler.HandleFilamentOption, ScreenHandler.HandleFilamentLoadUnload),
     #endif
   #endif
-  #if HOTENDS >= 2
+  #if HAS_MULTI_HOTEND
     VPHELPER(VP_T_E1_Is, &thermalManager.temp_hotend[1].celsius, nullptr, ScreenHandler.DGUSLCD_SendFloatAsLongValueToDisplay<0>),
     VPHELPER(VP_T_E1_Set, &thermalManager.temp_hotend[1].target, ScreenHandler.HandleTemperatureChanged, ScreenHandler.DGUSLCD_SendWordValueToDisplay),
     VPHELPER(VP_Flowrate_E1, &planner.flow_percentage[ExtUI::extruder_t::E1], ScreenHandler.HandleFlowRateChanged, ScreenHandler.DGUSLCD_SendWordValueToDisplay),  // ERROR: Flow is per-extruder, not per-hotend
@@ -466,7 +466,7 @@ const struct DGUS_VP_Variable ListOfVP[] PROGMEM = {
     VPHELPER(VP_WAITING_STATUS, nullptr, nullptr, ScreenHandler.DGUSLCD_SendWaitingStatusToDisplay),
   #endif
 
-  // Messages for the User, shared by the popup and the kill screen. They cant be autouploaded as we do not buffer content.
+  // Messages for the User, shared by the popup and the kill screen. They can't be autouploaded as we do not buffer content.
   { .VP = VP_MSGSTR1, .memadr = nullptr, .size = VP_MSGSTR1_LEN, .set_by_display_handler = nullptr, .send_to_display_handler = ScreenHandler.DGUSLCD_SendStringToDisplayPGM },
   { .VP = VP_MSGSTR2, .memadr = nullptr, .size = VP_MSGSTR2_LEN, .set_by_display_handler = nullptr, .send_to_display_handler = ScreenHandler.DGUSLCD_SendStringToDisplayPGM },
   { .VP = VP_MSGSTR3, .memadr = nullptr, .size = VP_MSGSTR3_LEN, .set_by_display_handler = nullptr, .send_to_display_handler = ScreenHandler.DGUSLCD_SendStringToDisplayPGM },
